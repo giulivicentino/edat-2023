@@ -631,10 +631,10 @@ y falso en caso contrario
         return esSobrino;
     }
     public boolean eliminar(Object elem){
-        return eliminarxdxd(elem,this.raiz);
+        return eliminarAux(elem,this.raiz);
     }
     
-    private boolean eliminarxdxd(Object elem, NodoGen nAux) {
+    private boolean eliminarAux(Object elem, NodoGen nAux) {
         boolean resultado = false;
         if (nAux != null) {
             if (nAux.getHijoIzquierdo() != null) {
@@ -662,54 +662,75 @@ y falso en caso contrario
             }
             NodoGen aux = nAux.getHijoIzquierdo();
             while (aux != null && !resultado) {
-                resultado = eliminarxdxd(elem, aux);
+                resultado = eliminarAux(elem, aux);
                 aux = aux.getHermanoDerecho();
             }
         }
         return resultado;
     }
-    
-    
-    
-    
-/*
-    public int orden(){
-        int numOrden =0;
-        if(this.raiz!=null){
-            numOrden = ordenAux(this.raiz,0);
-        }            
-     return numOrden;
+    // ------------------------------------------------------------------------PRACTICA FINAL!!!!
+    //Implemente la operación caminoAHojaMasCercana() ue devuelve el camino desde la raiz hasta la hoja mas cercana a la raiz.
+
+    public Lista caminoAHojaMasCercana() {
+        Lista camino= new Lista();
+        
+        System.out.println("RAIZ: "+this.raiz.getElem());
+        if (this.raiz != null) {
+            camino = caminoAHojaMasCercanaAux(raiz, camino);
+        }
+        return camino;
     }
+
     
-    private int ordenAux(NodoGen nodo, int ordenMax){
-        int ordenFinal;
-        if(nodo!=null){
-            
-            if(nodo.getHijoIzquierdo()!=null){
-                ordenActual = 1;
-                NodoGen hijo = nodo.getHijoIzquierdo();
-                while(hijo!=null){
-                    ordenActual++;
-                    hijo = hijo.getHermanoDerecho();
+
+    private Lista caminoAHojaMasCercanaAux(NodoGen nodo, Lista camino) {
+        boolean esHoja = nodo.getHijoIzquierdo()==null; //si no tiene hijos, es hoja
+
+        if (nodo != null) {
+            camino.insertar(nodo.getElem(), camino.longitud()+1); //agrego el nodo en el que estoy parado
+
+            NodoGen hijo = nodo.getHijoIzquierdo(); //si tiene algun hijo el nodo entonces pregunta por todos sus hermanos
+            while(!esHoja && hijo != null){
+                System.out.println("estoy en el hijo: "+hijo.getElem());
+                if (hijo.getHijoIzquierdo()!=null) { //como tiene hijos, pregunto a sus hermanos
+                    System.out.println("Tengo por lo menos un hijo: "+hijo.getElem().toString()+ " asi que voy a buscar en todos mis hijos");
+                    NodoGen hermanoDer = hijo.getHijoIzquierdo().getHermanoDerecho();
+                    while(hermanoDer!=null){ //busca en todos los hermanos derechos del hijo
+                        if(hermanoDer.getHijoIzquierdo()!=null){
+                            hermanoDer = hermanoDer.getHermanoDerecho();
+                        }else{
+                            System.out.println("SOY HOJA!! : "+hijo.getElem().toString());
+                            esHoja =true;
+                        }
+                    }
+                }else{
+                    System.out.println("SOY HOJA!! : "+hijo.getElem().toString());
+                    esHoja =true;
                 }
                 
-             
-            
+            hijo= hijo.getHermanoDerecho(); //busco con el hermano
+            }
+                
             
         }
-        
-        return ordenFinal;
+        return camino;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-}
-    private int calcularOrden(NodoGen nodo){
-        int numOrden = 0;
-        NodoGen hijo = nodo.getHijoIzquierdo();
-        while(hijo!=null){
-            numOrden = numOrden +1;
-            hijo= hijo.getHermanoDerecho();
-            numOrden = numOrden + calcularOrden(hijo);
-        }
-    }
-*/
 }
