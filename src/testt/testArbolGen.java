@@ -36,19 +36,32 @@ public class testArbolGen {
         arbol2.insertar('H', 'A');
         arbol2.insertar('B', 'A');
         arbol2.insertar('Z', 'A');
+
         arbol2.insertar('D', 'H');
+        arbol2.insertar('N', 'H');
+        arbol2.insertar('Q', 'H');
+
         arbol2.insertar('P', 'D');
         arbol2.insertar('G', 'D');
-        arbol2.insertar('Q', 'H');
+
+        arbol2.insertar('Y', 'N');
+
+        arbol2.insertar('L', 'Q');
+
+        arbol2.insertar('E', 'B');
+
         arbol2.insertar('F', 'Z');
-        arbol2.insertar('W', 'F');
-        arbol2.insertar('N', 'F');
         arbol2.insertar('C', 'Z');
         arbol2.insertar('J', 'Z');
+
+        arbol2.insertar('W', 'F');
+        arbol2.insertar('O', 'F');
+        
         arbol2.insertar('V', 'J');
         arbol2.insertar('M', 'J');
+        
         System.out.println("Arbol2(de las diapo): " + arbol2.toString());
         //System.out.println("es J, sobrino de H?  " + arbol2.esSobrino('J', 'H'));
-
+        System.out.println("CAMINO A HOJA MAS CERCANA:   "+arbol2.caminoAHojaMasCercana().toString());
     }
 }

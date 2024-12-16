@@ -676,61 +676,105 @@ y falso en caso contrario
         
         System.out.println("RAIZ: "+this.raiz.getElem());
         if (this.raiz != null) {
-            camino = caminoAHojaMasCercanaAux(raiz, camino);
+            boolean encontro = caminoAHojaMasCercanaAux(raiz, camino);
         }
         return camino;
     }
 
-    
+    private boolean caminoAHojaMasCercanaAux(NodoGen nodo, Lista camino) {
+        boolean esHoja = false;
+        if (nodo != null && !esHoja) {
 
+            if (nodo.getHijoIzquierdo() == null) {
+                camino.insertar(nodo.getElem(), camino.longitud() + 1);
+                System.out.println(
+                        "SoyHOJAA : " + nodo.getElem().toString() + " me agrego al camino: " + camino.toString());
+                esHoja = true;
+
+            } else {
+                camino.insertar(nodo.getElem(), camino.longitud() + 1);
+                System.out.println("Soy : " + nodo.getElem().toString() + " me agrego al camino: " + camino.toString());
+                NodoGen hijo = nodo.getHijoIzquierdo();
+                System.out.println("Tengo por lo menos un hijo:(SOY HI) " + hijo.getElem().toString()
+                        + " asi que voy a buscar en mis hermanos");
+                if (hijo.getHijoIzquierdo() != null) { //que el primer hijo NO sea hoja
+                    NodoGen hijoDer = hijo.getHermanoDerecho();
+                    System.out.println("Primer hermano derecho de: " + hijo.getElem() + " --> " + hijoDer.getElem());
+                    while (hijoDer != null && !esHoja) { // que recorra los hermanos que hagan falta
+                        if (hijoDer.getHijoIzquierdo() != null) {
+                            hijoDer = hijoDer.getHermanoDerecho(); // itera el hijo //ACTUALIZA A SUS HERMANOS
+                        } else {
+                            camino.insertar(hijoDer.getElem(), camino.longitud() + 1);
+                            System.out.println("SoyHOJAA : " + hijoDer.getElem().toString() + " me agrego al camino: "
+                                    + camino.toString());
+                            esHoja = true;
+                        }
+                    }
+                } else {//SI EL PRIMER HIJO ES HOJA
+                    camino.insertar(hijo.getElem(), camino.longitud() + 1);
+                    System.out.println("SoyHOJAA(hi) : " + hijo.getElem().toString() + " me agrego al camino: "
+                            + camino.toString());
+                    esHoja = true;
+                }
+
+                if (!esHoja) {
+                    System.out.println("soy el HI: " + hijo.getElem()
+                            + " y ninguno de mis hermanos es hoja, hago llamado recursivo");
+                }
+                while (!esHoja && hijo != null) { // SI NINGUNO DE LOS HERMANOS ERA HOJA, ENTONCES LLAMO RECURSIVO AL SIGUIENTE NIVEL
+                    esHoja = caminoAHojaMasCercanaAux(hijo, camino); // ANALIZA HIJO IZQUIERDO
+                    hijo = hijo.getHermanoDerecho(); // para cambiar de hermano que analiza
+                }
+            }
+
+        }
+        if (!esHoja) {
+            camino.eliminar(camino.longitud());
+            System.out.println("actualice el camino: " + camino.toString());
+        }
+        return esHoja;
+    }
+/* 
     private Lista caminoAHojaMasCercanaAux(NodoGen nodo, Lista camino) {
-        boolean esHoja = nodo.getHijoIzquierdo()==null; //si no tiene hijos, es hoja
+        boolean esHoja = false;
 
         if (nodo != null) {
-            camino.insertar(nodo.getElem(), camino.longitud()+1); //agrego el nodo en el que estoy parado
+            // camino.insertar(nodo.getElem(), camino.longitud()+1); //agrego el nodo en el
+            // que estoy parado
+            System.out.println("Soy : " + nodo.getElem().toString() + " me agrego al camino: " + camino.toString());
 
-            NodoGen hijo = nodo.getHijoIzquierdo(); //si tiene algun hijo el nodo entonces pregunta por todos sus hermanos
-            while(!esHoja && hijo != null){
-                System.out.println("estoy en el hijo: "+hijo.getElem());
-                if (hijo.getHijoIzquierdo()!=null) { //como tiene hijos, pregunto a sus hermanos
-                    System.out.println("Tengo por lo menos un hijo: "+hijo.getElem().toString()+ " asi que voy a buscar en todos mis hijos");
+            if (nodo.getHijoIzquierdo() == null) { // si no tiene hijos, es hoja)) {
+                esHoja = true;
+                System.out.println("SOY HOJA!! : " + nodo.getElem().toString());
+            } else { // como en el que estoy no es hoja, le pregunto a sus hijos
+                NodoGen hijo = nodo.getHijoIzquierdo(); // si tiene algun hijo el nodo entonces pregunta por todos sus hermanos
+                if (hijo.getHijoIzquierdo() != null) { // como tiene hijos, pregunto a sus hermanos
+                    System.out.println("Tengo por lo menos un hijo:(SOY HI) " + hijo.getElem().toString()+ " asi que voy a buscar en mis hermanos");
                     NodoGen hermanoDer = hijo.getHijoIzquierdo().getHermanoDerecho();
-                    while(hermanoDer!=null){ //busca en todos los hermanos derechos del hijo
-                        if(hermanoDer.getHijoIzquierdo()!=null){
+                    while (hermanoDer != null && !esHoja) { // busca en todos los hermanos derechos del hijo
+                        if (hermanoDer.getHijoIzquierdo() != null) {
                             hermanoDer = hermanoDer.getHermanoDerecho();
-                        }else{
-                            System.out.println("SOY HOJA!! : "+hijo.getElem().toString());
-                            esHoja =true;
+                        } else {
+                            System.out.println("SOY HOJA!! : " + hijo.getElem().toString());
+                            esHoja = true;
                         }
                     }
                 }else{
-                    System.out.println("SOY HOJA!! : "+hijo.getElem().toString());
-                    esHoja =true;
+                    esHoja=true;
                 }
-                
-            hijo= hijo.getHermanoDerecho(); //busco con el hermano
-            }
-                
+                if (!esHoja) { // si en ese nivel no habia una hoja, lo elimina del camino
+                    camino.eliminar(camino.longitud());
+                    System.out.println("actualice el camino: " +camino.toString());
+                }
+
+                camino.insertar(nodo.getElem(), camino.longitud() + 1);
+            
             
         }
+        
         return camino;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
     
 }

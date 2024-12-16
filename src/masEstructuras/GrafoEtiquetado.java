@@ -765,4 +765,54 @@ public class GrafoEtiquetado {
         }
         return cadena;
     }
+// ----------------------------------------------PRACTICA FINAL
+/*(2019)    implemente la operación caminosDePesoEntre(origen, destino,
+pesoMin, pesoMax) que recibe dos vértices y dos cantidades numéricas y devuelve el primer
+camino que encuentra que sale del vértice origen y llega al vértice destino y que tenga peso (suma
+de los valores de los arcos que los unen) mayor o igual a pesoMin y menor o igual a pesoMax.
+Suponga que los dos vértices pasados por parámetro son distintos. */
+
+public Lista caminosDePesoEntre(Object origen, Object destino, Object pesoMin, Object pesoMax){
+    Lista resultado = new Lista();
+    Lista visitados = new Lista();
+    NodoVert origenAux = ubicarVertice(origen);
+    NodoVert destinoAux = ubicarVertice(destino);
+    System.out.println("HOLA!!");
+    System.out.println("con q carajo estoy llamando, origen: "+origen.toString()+" destino: "+destino.toString()+" pesoMin: "+pesoMin+" pesoMax: "+pesoMax);
+    if(origenAux!=null && destinoAux!=null /*&& (int)pesoMin<1 &&(int)pesoMax>(int)pesoMin*/){
+        resultado=caminosDePesoEntreAux(origenAux,destino,pesoMin,pesoMax,0,visitados,resultado);
+    }
+    return resultado;
+}
+
+private Lista caminosDePesoEntreAux(NodoVert vert, Object destino, Object pesoMin, Object pesoMax,int pesoActual,Lista visitados, Lista resultado){
+    if(vert!=null){ System.out.println("SOY: "+vert.getElem()+" camine: "+visitados.toString());
+        //lo agrego al camino
+        visitados.insertar(vert.getElem(),visitados.longitud()+1);
+        if(pesoActual==0||pesoActual>(int)pesoMin && pesoActual<(int)pesoMax){ //creo que esta de mas?¿
+            if(vert.getElem().equals(destino)){
+                System.out.println("LLEGUE!  camino: "+visitados.toString()+"  con peso: "+pesoActual+"kg");
+                resultado= visitados.clone();
+                
+            }else{//sigo recorriendo todos los adyacentes
+                System.out.println("BUSCO MIS ADY");
+                NodoAdy ady = vert.getPrimerAdy(); //primera conexion
+                while(ady!=null){
+                    if(visitados.localizar(ady.getVertice().getElem()) < 0){ 
+                        pesoActual= (int) (pesoActual + ady.getEtiqueta()); //acumulu el peso
+                        if(pesoActual>(int)pesoMin && pesoActual<(int)pesoMax){ //si me paso entonces cambio de ady y no me meto por ese camino
+                            resultado= caminosDePesoEntreAux(ady.getVertice(),destino,pesoMin,pesoMax,pesoActual,visitados,resultado);//llamado recursivo
+                        }
+                        //si no llegue a destino o me pase, entonces continua aca la ejecucion, x lo tanto descuento el peso
+                        pesoActual= (int) (pesoActual - ady.getEtiqueta()); 
+                    }
+                    ady=ady.getSigAdyacente();
+                }
+            }
+        }
+        visitados.eliminar(visitados.longitud()); //si no era destino, a la vuelta lo elimina
+    }
+return resultado;
+}
+
 }

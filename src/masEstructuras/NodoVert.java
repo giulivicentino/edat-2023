@@ -1,4 +1,4 @@
-package estructuras;
+package masEstructuras;
 
 public class NodoVert {
     
