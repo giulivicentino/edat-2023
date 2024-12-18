@@ -50,6 +50,8 @@ public class testArbolGen {
 
         arbol2.insertar('E', 'B');
 
+        arbol2.insertar('R', 'E');
+
         arbol2.insertar('F', 'Z');
         arbol2.insertar('C', 'Z');
         arbol2.insertar('J', 'Z');
@@ -57,11 +59,17 @@ public class testArbolGen {
         arbol2.insertar('W', 'F');
         arbol2.insertar('O', 'F');
         
+        arbol2.insertar('I', 'C');
+
         arbol2.insertar('V', 'J');
         arbol2.insertar('M', 'J');
         
-        System.out.println("Arbol2(de las diapo): " + arbol2.toString());
+        //System.out.println("Arbol2(de las diapo): " + arbol2.toString());
         //System.out.println("es J, sobrino de H?  " + arbol2.esSobrino('J', 'H'));
-        System.out.println("CAMINO A HOJA MAS CERCANA:   "+arbol2.caminoAHojaMasCercana().toString());
+       // System.out.println("obtener nodo "+arbol2.obtenerNodoP("L"));
+        //System.out.println("CAMINO A HOJA MAS CERCANA:   "+arbol2.caminoAHojaMasCercana().toString());
+        //System.out.println("listar por niveles "+arbol2.listarPorNiveles().toString());
+        System.out.println("CAMINO A HOJA MAS LEJANA:   "+arbol2.caminoAHojaMasLejana().toString());
+
     }
 }
